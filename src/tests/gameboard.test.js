@@ -16,12 +16,12 @@ describe('Gameboard', () => {
     });
 
     test('calculatePositions returns correct positions for horizontal orientation', () => {
-        const positions = gameboard.calculatePositions(destroyer, 0, 0, 'horizontal');
+        const positions = gameboard.calculatePositions(destroyer, 0, 0, 'vertical');
         expect(positions).toEqual([{ row: 0, column: 0 }, { row: 0, column: 1 }, { row: 0, column: 2 }]);
     });
 
     test('calculatePositions returns correct positions for vertical orientation', () => {
-        const positions = gameboard.calculatePositions(destroyer, 0, 0, 'vertical');
+        const positions = gameboard.calculatePositions(destroyer, 0, 0, 'horizontal');
         expect(positions).toEqual([{ row: 0, column: 0 }, { row: 1, column: 0 }, { row: 2, column: 0 }]);
     });
 
@@ -44,7 +44,7 @@ describe('Gameboard', () => {
     });
 
     test('placeShip updates board with ship positions', () => {
-        gameboard.placeShip(destroyer, 0, 0, 'horizontal');
+        gameboard.placeShip(destroyer, 0, 0, 'vertical');
         expect(gameboard.board[0][0]).toBe(destroyer);
         expect(gameboard.board[0][1]).toBe(destroyer);
         expect(gameboard.board[0][2]).toBe(destroyer);
