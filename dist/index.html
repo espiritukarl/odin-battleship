@@ -3,8 +3,25 @@
   <head>
     <meta charset="utf-8" />
     <title>Getting Started</title>
+    <script src="main.js" defer></script>
   </head>
   <body>
-    <script src="main.js"></script>
+    <header>
+      <h1>Battleship!</h1>
+    </header>
+    <main id="container">
+      <section class="board-container player">
+        <h2>Player</h2>
+        <div class="player board"></div>
+        <div class="buttons">
+            <button id="start">Start</button>
+            <button id="rotate">Rotate</button>
+            <span id="rotate-direction">Horizontal</span>
+        </div>
+      </section>
+      <section class="board-container computer">
+
+      </section>
+    </main>
   </body>
 </html>
