@@ -40,7 +40,7 @@ function setupShipPlacementListener(board, player, rotateDirection) {
         }
 
         if(player.gameboard.ships.length === 5) {
-            startBtn.style.visibility = "visible";
+            startBtn.classList.toggle("hide")
             board.removeEventListener('click', boardListener)
         }
     };

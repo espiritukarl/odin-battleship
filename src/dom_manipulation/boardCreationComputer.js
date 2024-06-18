@@ -5,6 +5,8 @@ export function buildComputerBoard(computer) {
     const computerBoard = document.createElement("div")
     const h2 = document.createElement("h2")
     const startBtn = document.getElementById("start");
+    const rotateDirection = document.getElementById("rotate-direction");
+    const rotateBtn = document.getElementById("rotate");
 
 
     computerBoard.classList.add("computer", "board")
@@ -32,5 +34,7 @@ export function buildComputerBoard(computer) {
         }
     }
 
-    startBtn.style.visibility = "hidden"
+    startBtn.classList.toggle("hide")
+    rotateDirection.classList.add("hide")
+    rotateBtn.classList.add("hide")
 }

@@ -78,6 +78,6 @@ h1 {
   border: 2px solid #0aa; /* Darker cyan border */
 }
 
-#start {
+.hide {
   visibility: hidden;
 }
