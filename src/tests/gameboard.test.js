@@ -25,18 +25,11 @@ describe('Gameboard', () => {
         expect(positions).toEqual([{ row: 0, column: 0 }, { row: 1, column: 0 }, { row: 2, column: 0 }]);
     });
 
-    test('checkOccupiedPositions returns true if any positions are occupied', () => {
+    test('placeShip throws error if positions are occupied', () => {
         gameboard.board[0][0] = 'ship';
-        const positions = [{ row: 0, column: 0 }, { row: 0, column: 1 }];
-        expect(gameboard.checkOccupiedPositions(positions)).toBeTruthy();;
+        expect(() => gameboard.calculatePositions(destroyer, 0, 0, 'horizontal')).toThrow("Another ship is already placed here");
     });
 
-    test('checkOccupiedPositions returns false if no positions are occupied', () => {
-        gameboard.board[0][0] = null;
-        gameboard.board[0][1] = null;
-        const positions = [{ row: 0, column: 0 }, { row: 0, column: 1 }];
-        expect(gameboard.checkOccupiedPositions(positions)).toBe(false);
-    });
 
     test('placeShip throws error if positions are occupied', () => {
         gameboard.board[0][0] = 'ship';

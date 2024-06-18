@@ -20,32 +20,22 @@ export class Gameboard {
         for (let i = 0; i < ship.length; i++) {
             const column = orientation === "vertical" ? startX + i : startX;
             const row = orientation === "horizontal" ? startY + i : startY;
+            if (this.board[row][column]) {
+                throw new Error("Another ship is already placed here");
+            }
             positions.push({ row, column });
         }
         return positions;
-    }
-
-    checkOccupiedPositions(positions) {
-        for (const { row, column } of positions) {
-            if (this.board[row][column] !== null) {
-                return this.board[row][column]; 
-            }
-        }
-        return false; 
     }
 
     placeShip(ship, startX, startY, orientation) {
         this.validatePlacement(ship, startX, startY, orientation);
 
         const positions = this.calculatePositions(ship, startX, startY, orientation);
+        positions.forEach(({ row, column }) => {
+            this.board[row][column] = ship;
+        });
 
-        if (this.checkOccupiedPositions(positions)) {
-            throw new Error("Another ship is already placed here");
-        } else {
-            positions.forEach(({ row, column }) => {
-                this.board[row][column] = ship;
-            });
-        }
         
         this.ships.push(ship)
     }
