@@ -13,6 +13,5 @@ const computer = new Player();
 buildPlayerBoardPlacer(player)
 startBtn.addEventListener("click", () => {
     buildComputerBoard(computer)
-    player.switchTurn()
     gameStart(player, computer)
 })

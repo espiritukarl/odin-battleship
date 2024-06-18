@@ -3,7 +3,6 @@ import { Ship } from './ship'
 
 export class Player {
     constructor() {
-        this.turn = false
         this.gameboard = new Gameboard()
     }
 
@@ -30,9 +29,5 @@ export class Player {
     addCruiser(startX, startY, orientation) {
         const cruiser = new Ship("Cruiser", 2);
         this.gameboard.placeShip(cruiser, startX, startY, orientation);
-    }
-
-    switchTurn() {
-        this.turn = !this.turn
     }
 }
