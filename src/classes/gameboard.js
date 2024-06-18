@@ -1,6 +1,6 @@
 export class Gameboard {
     constructor() {
-        this.board = Array.from({ length: 10 }, () => Array(10).fill(null));
+        this.board = Array.from({ length: 10 }, () => Array(10).fill(0));
         this.misses = [];
         this.ships = []
     }
@@ -8,8 +8,8 @@ export class Gameboard {
     validatePlacement(ship, startX, startY, orientation) {
         if (startX < 0 || startX > 9 ||
             startY < 0 || startY > 9 ||
-            (orientation === "horizontal" && startX + ship.length > 10) ||
-            (orientation === "vertical" && startY + ship.length > 10)
+            (orientation === "vertical" && startX + ship.length > 10) ||
+            (orientation === "horizontal" && startY + ship.length > 10) 
         ) {
             throw new Error("Ship placement out of bounds");
         }
@@ -18,8 +18,8 @@ export class Gameboard {
     calculatePositions(ship, startX, startY, orientation) {
         const positions = [];
         for (let i = 0; i < ship.length; i++) {
-            const column = orientation === "horizontal" ? startX + i : startX;
-            const row = orientation === "vertical" ? startY + i : startY;
+            const column = orientation === "vertical" ? startX + i : startX;
+            const row = orientation === "horizontal" ? startY + i : startY;
             positions.push({ row, column });
         }
         return positions;
@@ -41,11 +41,11 @@ export class Gameboard {
 
         if (this.checkOccupiedPositions(positions)) {
             throw new Error("Another ship is already placed here");
+        } else {
+            positions.forEach(({ row, column }) => {
+                this.board[row][column] = ship;
+            });
         }
-
-        positions.forEach(({ row, column }) => {
-            this.board[row][column] = ship;
-        });
         
         this.ships.push(ship)
     }
