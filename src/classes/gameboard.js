@@ -1,6 +1,7 @@
 export class Gameboard {
     constructor() {
         this.board = Array.from({ length: 10 }, () => Array(10).fill(0));
+        this.hits = [];
         this.misses = [];
         this.ships = []
     }
@@ -40,9 +41,22 @@ export class Gameboard {
         this.ships.push(ship)
     }
 
+    arraysEqual(arr1, arr2) {
+        if (arr1.length !== arr2.length) return false;
+        for (let i = 0; i < arr1.length; i++) {
+            if (arr1[i] !== arr2[i]) return false;
+        }
+        return true;
+    }
+
     receiveAttack(attackCoordinates) {
         const x = attackCoordinates[0] 
         const y = attackCoordinates[1] 
+
+        if(
+            this.hits.some(array => this.arraysEqual(array, attackCoordinates)) || 
+            this.misses.some(array => this.arraysEqual(array, attackCoordinates))
+        ) throw new Error("Tile already clicked")
 
         if (attackCoordinates.length !== 2 ||
             x > 9 || x < 0 ||
@@ -50,8 +64,14 @@ export class Gameboard {
         ) throw new Error("Attack placement is invalid")
 
         const ship = this.board[y][x]
-        if(ship) ship.hit()
-        else this.misses.push(attackCoordinates)
+        if(ship) {
+            ship.hit()
+            this.hits.push(attackCoordinates)
+            return true
+        } else {
+            this.misses.push(attackCoordinates)
+            return false
+        }
     }
 
     allShipsSunk() {
