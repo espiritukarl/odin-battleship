@@ -61,7 +61,7 @@ initializeGame();
 
 // -- 1. Computer hidden ships --
 // -- 2. X when miss; O when hit --
-// 3. Styling
+// -- 3. Styling --
 // 4. Refactor hiding buttons
 // 5. Refactor validation of placements (put it inside computer)
 // 6. Refactor tests

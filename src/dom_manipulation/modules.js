@@ -3,7 +3,6 @@ export function buildBoard(board) {
         for (let j = 0; j < 10; j++) {
             const square = document.createElement('div');
             square.classList.add('square');
-            square.classList.add((i + j) % 2 === 0 ? 'white' : 'black');
             square.dataset.position = `${i},${j}`;
             board.appendChild(square);
         }
