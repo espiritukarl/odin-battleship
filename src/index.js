@@ -51,6 +51,7 @@ restartBtn.addEventListener("click", () => {
     computer.restart();
     board.innerHTML = '';
     computerSection.innerHTML = "";
+    document.querySelector(".results").textContent = ""
 
     initializeGame();
 });
@@ -65,4 +66,4 @@ initializeGame();
 // 5. Refactor validation of placements (put it inside computer)
 // 6. Refactor tests
 // 7. Create test for Player
-// 8. On hover, show ship
+// -- 8. On hover, show ship --
