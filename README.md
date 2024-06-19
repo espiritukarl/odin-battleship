@@ -4,4 +4,4 @@
 - display text when a Ship sinks
 - modal when a player wins w/ a New Game button
 - different color for different ships when sunk
-- 
+- Live Demo: https://espiritukarl.github.io/odin-battleship/
