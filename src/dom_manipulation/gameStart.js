@@ -2,9 +2,12 @@ import { generateRandom } from "./modules"
 
 const playerBoard = document.querySelector('.player.board');
 const computerBoard = document.querySelector('.board-container.computer');
+const results = document.querySelector(".results")
 let playerClickListener = null
 
 export function handlePlayerTurn(player, computer) {
+    results.textContent = "Player's Turn!"
+
     playerBoard.classList.add("dim")
     computerBoard.classList.remove("dim")
 
@@ -20,20 +23,16 @@ export function handlePlayerTurn(player, computer) {
                 event.target.textContent = "O"
                 playerBoard.classList.remove("dim")
                 computerBoard.classList.add("dim")
-                setTimeout(() => {
-                    handleComputerTurn(player, computer);
-                }, 1000)
-            } else if (computer.gameboard.allShipsSunk()) {
-                event.target.classList.add("hit")
-                event.target.textContent = "X"
-                finishedGame("Player", computerBoard, playerClickListener)
+                results.textContent = "Computer's Turn!"
+                setTimeout(() => { handleComputerTurn(player, computer); }, 1000) //swap turn
             } else {
                 event.target.classList.add("hit")
                 event.target.textContent = "X"
                 checkIfHitSinks(computer, "computer", x, y)
+                if (computer.gameboard.allShipsSunk()) finishedGame("Player", computerBoard, playerClickListener)
             }
         } catch (err) {
-            alert(err.message); 
+            results.textContent = "Tile already clicked!"
         }
     };
     
@@ -42,32 +41,31 @@ export function handlePlayerTurn(player, computer) {
 
 function handleComputerTurn(player, computer) {
     let value = generateRandom()
-    const x = value[0]
-    const y = value[1]
+    let x = value[0];
+    let y = value[1];
+
     const position = document.querySelector(`[data-position='${x},${y}']`)
 
     try {
         if (!player.gameboard.receiveAttack([x, y])) {
+            console.log("missed")
             position.classList.add("miss")
             position.textContent = "O"
-            handlePlayerTurn(player, computer);
-        } else if (player.gameboard.allShipsSunk()) {
-            position.classList.add("hit")
-            position.textContent = "X"
-            finishedGame("Computer", playerBoard,)
+            handlePlayerTurn(player, computer); //swap turn
         } else {
+            console.log("hit")
             position.classList.add("hit")
             position.textContent = "X"
-            handleComputerTurn(player, computer)
+            setTimeout(() => { handleComputerTurn(player, computer); }, 1000) //keep going the same turn
             checkIfHitSinks(player, "player", x, y)
+            if (player.gameboard.allShipsSunk()) finishedGame("Computer", playerBoard,)
         }
     } catch (err) {
-        alert(err.message); 
+        if (err.message === "Tile already clicked") handleComputerTurn(player, computer)
     }
 }
 
 function finishedGame(winner, board, clickListener) {
-    const results = document.querySelector(".results")
     const restartBtn = document.getElementById("restart")
 
     board.removeEventListener('click', clickListener)
