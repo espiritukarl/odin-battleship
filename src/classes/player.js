@@ -6,28 +6,25 @@ export class Player {
         this.gameboard = new Gameboard()
     }
 
-    addAircraftCarrier(startX, startY, orientation) {
-        const aircraftCarrier = new Ship("Aircraft Carrier", 5);
-        this.gameboard.placeShip(aircraftCarrier, startX, startY, orientation);
+    addShip(length, startX, startY, orientation) {
+        let ship = (() => {
+            switch(length) {
+                case 5:
+                    return new Ship("Aircraft Carrier", 5);
+                case 4:
+                    return new Ship("Battleship", 4);
+                case 3:
+                    return new Ship("Destroyer", 3);
+                case 2:
+                    return new Ship("Submarine", 3);
+                case 1:
+                    return new Ship("Cruiser", 2);
+            } 
+        })();
+        this.gameboard.placeShip(ship, startX, startY, orientation)
     }
 
-    addBattleship(startX, startY, orientation) {
-        const battleship = new Ship("Battleship", 4);
-        this.gameboard.placeShip(battleship, startX, startY, orientation);
-    }
-
-    addDestroyer(startX, startY, orientation) {
-        const destroyer = new Ship("Destroyer", 3);
-        this.gameboard.placeShip(destroyer, startX, startY, orientation);
-    }
-
-    addSubmarine(startX, startY, orientation) {
-        const submarine = new Ship("Submarine", 3);
-        this.gameboard.placeShip(submarine, startX, startY, orientation);
-    }
-
-    addCruiser(startX, startY, orientation) {
-        const cruiser = new Ship("Cruiser", 2);
-        this.gameboard.placeShip(cruiser, startX, startY, orientation);
+    restart() {
+        this.gameboard = new Gameboard()
     }
 }

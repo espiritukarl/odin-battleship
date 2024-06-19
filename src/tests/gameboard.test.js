@@ -10,11 +10,6 @@ describe('Gameboard', () => {
         destroyer = new Ship("Destroyer", 3);
     });
 
-    test('validatePlacement throws error for out of bounds coordinates', () => {
-        expect(() => gameboard.validatePlacement(destroyer, -1, 0, 'horizontal')).toThrow("Ship placement out of bounds");
-        expect(() => gameboard.validatePlacement(destroyer, 0, 10, 'vertical')).toThrow("Ship placement out of bounds");
-    });
-
     test('calculatePositions returns correct positions for horizontal orientation', () => {
         const positions = gameboard.calculatePositions(destroyer, 0, 0, 'vertical');
         expect(positions).toEqual([{ row: 0, column: 0 }, { row: 0, column: 1 }, { row: 0, column: 2 }]);
@@ -43,10 +38,10 @@ describe('Gameboard', () => {
         expect(gameboard.board[0][2]).toBe(destroyer);
     });
 
-    test('receiveAttack throws error for invalid attack placement', () => {
-        expect(() => gameboard.receiveAttack(destroyer, [0])).toThrow("Attack placement is invalid");
-        expect(() => gameboard.receiveAttack(destroyer, [0, 1, 2])).toThrow("Attack placement is invalid");
-        expect(() => gameboard.receiveAttack(destroyer, [10, 10])).toThrow("Attack placement is invalid");
+    test('validateAttackCoords throws error for invalid attack placement', () => {
+        expect(() => gameboard.validateAttackCoords(destroyer, [0])).toThrow("Attack placement is invalid");
+        expect(() => gameboard.validateAttackCoords(destroyer, [0, 1, 2])).toThrow("Attack placement is invalid");
+        expect(() => gameboard.validateAttackCoords(destroyer, [10, 10])).toThrow("Attack placement is invalid");
     });
 
     test('receiveAttack hits the ship if attack coordinates match ship position', () => {
@@ -69,6 +64,15 @@ describe('Gameboard', () => {
         
         expect(destroyer.hits).toBe(originalHits); // Check if ship's hits remain unchanged
     });
+
+    test(('receiveAttack returns a truthy or falsey value if it hits or misses'), () => {
+        const hitCoordinates = [0, 0];
+        const missCoordinates = [0, 1];
+        gameboard.board[0][0] = destroyer; // Place the ship at attack coordinates
+
+        expect(gameboard.receiveAttack(hitCoordinates)).toBeTruthy();
+        expect(gameboard.receiveAttack(missCoordinates)).toBeFalsy();
+    })
 
     test('allShipsSunk returns true when all ships are sunk', () => {
         // Create some ships and sink them

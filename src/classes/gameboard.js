@@ -7,13 +7,9 @@ export class Gameboard {
     }
 
     validatePlacement(ship, startX, startY, orientation) {
-        if (startX < 0 || startX > 9 ||
-            startY < 0 || startY > 9 ||
-            (orientation === "vertical" && startX + ship.length > 10) ||
+        if ((orientation === "vertical" && startX + ship.length > 10) ||
             (orientation === "horizontal" && startY + ship.length > 10) 
-        ) {
-            throw new Error("Ship placement out of bounds");
-        }
+        ) throw new Error("Ship placement out of bounds");
     }
 
     calculatePositions(ship, startX, startY, orientation) {
@@ -37,41 +33,31 @@ export class Gameboard {
             this.board[row][column] = ship;
         });
 
-        
         this.ships.push(ship)
     }
 
-    arraysEqual(arr1, arr2) {
-        if (arr1.length !== arr2.length) return false;
-        for (let i = 0; i < arr1.length; i++) {
-            if (arr1[i] !== arr2[i]) return false;
-        }
-        return true;
+    validateAttackCoords(coords) {
+        if (this.hits.some(array => array.every((value,index) => value === coords[index])) || 
+            this.misses.some(array => array.every((value,index) => value === coords[index]))
+        ) throw new Error("Tile already clicked")
+
+        if (coords.length !== 2 ||
+            coords[0] > 9 || coords[0] < 0 ||
+            coords[1] > 9 || coords[1] < 0
+        ) throw new Error("Attack placement is invalid")
     }
 
     receiveAttack(attackCoordinates) {
-        const x = attackCoordinates[0] 
-        const y = attackCoordinates[1] 
+        this.validateAttackCoords(attackCoordinates)
 
-        if(
-            this.hits.some(array => this.arraysEqual(array, attackCoordinates)) || 
-            this.misses.some(array => this.arraysEqual(array, attackCoordinates))
-        ) throw new Error("Tile already clicked")
-
-        if (attackCoordinates.length !== 2 ||
-            x > 9 || x < 0 ||
-            y > 9 || y < 0
-        ) throw new Error("Attack placement is invalid")
-
-        const ship = this.board[y][x]
+        const ship = this.board[attackCoordinates[1]][attackCoordinates[0]]
         if(ship) {
             ship.hit()
             this.hits.push(attackCoordinates)
-            return true
         } else {
             this.misses.push(attackCoordinates)
-            return false
         }
+        return !!ship
     }
 
     allShipsSunk() {

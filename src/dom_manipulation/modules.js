@@ -29,12 +29,24 @@ export function generateRandom() {
     return [randomX, randomY, orientation];
 }
 
-export function getShipsToPlace(player) {
-    return [
-        { name: 'Aircraft Carrier', length: 5, addShip: (x, y, orientation) => player.addAircraftCarrier(x, y, orientation) },
-        { name: 'Battleship', length: 4, addShip: (x, y, orientation) => player.addBattleship(x, y, orientation) },
-        { name: 'Destroyer', length: 3, addShip: (x, y, orientation) => player.addDestroyer(x, y, orientation) },
-        { name: 'Submarine', length: 3, addShip: (x, y, orientation) => player.addSubmarine(x, y, orientation) },
-        { name: 'Cruiser', length: 2, addShip: (x, y, orientation) => player.addCruiser(x, y, orientation) },
-    ];
+export const lengths = [5, 4, 3, 2, 1]
+
+export function randomizeShipPlacement(player, board, index, isComputer) {
+    const startBtn = document.getElementById("start");
+
+    while(player.gameboard.ships.length < 5) {
+        let value = generateRandom()
+        const x = Number(value[0])
+        const y = Number(value[1])
+        const direction = value[2]
+
+        try {
+            player.addShip(lengths[index], x, y, direction)
+            if (isComputer) updateBoard(board, player.gameboard);
+            index++;
+        } catch (error) {
+        }
+    }
+
+    if (isComputer) startBtn.disabled = false
 }
