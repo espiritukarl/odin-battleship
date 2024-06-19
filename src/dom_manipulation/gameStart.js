@@ -48,12 +48,10 @@ function handleComputerTurn(player, computer) {
 
     try {
         if (!player.gameboard.receiveAttack([x, y])) {
-            console.log("missed")
             position.classList.add("miss")
             position.textContent = "O"
             handlePlayerTurn(player, computer); //swap turn
         } else {
-            console.log("hit")
             position.classList.add("hit")
             position.textContent = "X"
             setTimeout(() => { handleComputerTurn(player, computer); }, 1000) //keep going the same turn
