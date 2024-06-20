@@ -19,6 +19,8 @@ const computer = new Player();
 // Function to set up player board and event listeners
 function initializeGame() {
     buildPlayerBoardPlacer(player);
+    restartBtn.textContent = "Restart"
+    
     board.classList.remove("dim")
     startBtn.classList.remove("hide");
     rotateDirection.classList.remove("hide");
