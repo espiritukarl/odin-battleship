@@ -20,11 +20,12 @@ export function handlePlayerTurn(player, computer) {
             if (!computer.gameboard.receiveAttack([x, y])) {
                 computerBoard.removeEventListener('click', playerClickListener);
                 event.target.classList.add("miss")
-                event.target.textContent = "O"
+
+                //swap turn
                 playerBoard.classList.remove("dim")
                 computerBoard.classList.add("dim")
                 results.textContent = "Computer's Turn!"
-                setTimeout(() => { handleComputerTurn(player, computer); }, 1000) //swap turn
+                setTimeout(() => { handleComputerTurn(player, computer); }, 1000) 
             } else {
                 event.target.classList.add("hit")
                 event.target.textContent = "X"
@@ -49,7 +50,6 @@ function handleComputerTurn(player, computer) {
     try {
         if (!player.gameboard.receiveAttack([x, y])) {
             position.classList.add("miss")
-            position.textContent = "O"
             handlePlayerTurn(player, computer); //swap turn
         } else {
             position.classList.add("hit")
