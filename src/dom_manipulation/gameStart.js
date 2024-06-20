@@ -72,24 +72,14 @@ function finishedGame(winner, board, clickListener) {
 }
 
 function checkIfHitSinks(player, name, x, y) {
-    let board = player.gameboard.board
-    let ship = board[y][x]
-    let finished = 0
+    if (!player.gameboard.board[y][x].isSunk()) return
 
-    if (!ship.isSunk()) return
-
-    //check horizontal
-    for (let i = Math.max(0, y-(ship.length - 1)); i < y + ship.length; i++) {
-        if (board[i][x] === ship) {
-            document.querySelector(`.${name}.board [data-position='${x},${i}']`).classList.add("sunk")
-            finished++
+    for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 10; j++) {
+            if (player.gameboard.board[j][i] === player.gameboard.board[y][x]) 
+                document.querySelector(`.${name}.board [data-position='${i},${j}']`).classList.add("sunk")
         }
     }
 
-    if (finished === ship.length) return
-
-    //check vertical
-    for (let i = Math.max(0, x-(ship.length - 1)); i < x + ship.length; i++) {
-        if (board[y][i] === ship) document.querySelector(`.${name}.board [data-position='${i},${y}']`).classList.add("sunk")
-    }
+    results.textContent = `${player.gameboard.board[y][x].name} has been sunk!`
 }

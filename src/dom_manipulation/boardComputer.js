@@ -20,7 +20,7 @@ export function buildComputerBoard(computer) {
 
     let currentShipIndex = 0;
 
-    randomizeShipPlacement(computer, computerBoard, currentShipIndex, false)
+    randomizeShipPlacement(computer, computerBoard, currentShipIndex, true)
 
     startBtn.classList.toggle("hide")
     rotateDirection.classList.toggle("hide")
