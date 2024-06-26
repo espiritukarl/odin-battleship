@@ -41,6 +41,8 @@ function startGame() {
     randomBtn.classList.add("hide");
     restartBtn.classList.remove("hide");
 
+    restartBtn.textContent = "Restart"
+
     // Remove the event listener to avoid duplication
     startBtn.removeEventListener("click", startGame);
 }

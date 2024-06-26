@@ -98,17 +98,18 @@ h1 {
 }
 
 .hit {
-  background-color: #0f0;
+  border: 2px solid rgb(0, 53, 0);
+  background: rgb(0, 114, 0);
 }
 
 .miss {
   border: 2px blue solid;
-  background: transparent;
+  background: #10678f;
 }
 
 .sunk {
-  border-color: rgb(252, 41, 41);
-  background-color: rgb(252, 41, 41);
+  border: 2px solid rgb(252, 41, 41);
+  background: rgb(252, 76, 76);
 }
 
 button {

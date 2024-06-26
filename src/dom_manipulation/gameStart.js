@@ -3,7 +3,7 @@ import { generateRandom, targetMovement, addVectors, isOutOfRange } from "./modu
 const playerBoard = document.querySelector('.player.board');
 const computerBoard = document.querySelector('.board-container.computer');
 const results = document.querySelector(".results")
-const computerDelay = 1000
+const computerDelay = 1
 let playerClickListener = null
 let queue = []
 let computerTargetMode = false
@@ -23,8 +23,6 @@ export function handlePlayerTurn(player, computer) {
             if (!computer.gameboard.receiveAttack([x, y])) {
                 computerBoard.removeEventListener('click', playerClickListener);
                 event.target.classList.add("miss")
-                event.target.textContent = "O"
-                //swap turn
                 playerBoard.classList.remove("dim")
                 computerBoard.classList.add("dim")
                 results.textContent = "Computer's Turn!"
@@ -62,7 +60,7 @@ function handleComputerTurn(player, computer) {
                 computerTargetMode = false
                 queue = []
                 if (player.gameboard.allShipsSunk()) finishedGame("Computer", playerBoard,)
-                setTimeout(() => { handleComputerTurn(player, computer); }, computerDelay)
+                else setTimeout(() => { handleComputerTurn(player, computer); }, computerDelay)
             } else {
                 targetMovement.forEach(move => {
                     let newPos = addVectors(currentCoord, move)
@@ -74,7 +72,6 @@ function handleComputerTurn(player, computer) {
             }
         } else {
             position.classList.add("miss")
-            position.textContent = "O"
             handlePlayerTurn(player, computer); //swap turn
         }
     } catch (err) {
@@ -83,6 +80,7 @@ function handleComputerTurn(player, computer) {
 }
 
 function finishedGame(winner, board, clickListener) {
+    queue = []
     const restartBtn = document.getElementById("restart")
 
     board.removeEventListener('click', clickListener)
