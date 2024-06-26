@@ -3,6 +3,7 @@ import { generateRandom, targetMovement, addVectors, isOutOfRange } from "./modu
 const playerBoard = document.querySelector('.player.board');
 const computerBoard = document.querySelector('.board-container.computer');
 const results = document.querySelector(".results")
+const computerDelay = 1000
 let playerClickListener = null
 let queue = []
 let computerTargetMode = false
@@ -27,7 +28,7 @@ export function handlePlayerTurn(player, computer) {
                 playerBoard.classList.remove("dim")
                 computerBoard.classList.add("dim")
                 results.textContent = "Computer's Turn!"
-                setTimeout(() => { handleComputerTurn(player, computer); }, 1) 
+                setTimeout(() => { handleComputerTurn(player, computer); }, computerDelay) 
             } else {
                 event.target.classList.add("hit")
                 event.target.textContent = "X"
@@ -47,43 +48,35 @@ function handleComputerTurn(player, computer) {
     let x = value[0];
     let y = value[1];
 
-    const position = document.querySelector(`[data-position='${x},${y}']`)
-
     if (!computerTargetMode) queue = [[x,y]]
 
     try {
         let currentCoord = queue.shift()
+        const position = document.querySelector(`[data-position='${currentCoord[0]},${currentCoord[1]}']`)
+
         if (player.gameboard.receiveAttack(currentCoord)) {
             position.classList.add("hit")
             position.textContent = "X"
             computerTargetMode = true
-            if (checkIfHitSinks(player, "player", x, y)) {
+            if (checkIfHitSinks(player, "player", currentCoord[0], currentCoord[1])) {
                 computerTargetMode = false
-                setTimeout(() => { handleComputerTargeter(player, computer); }, 1)
+                queue = []
                 if (player.gameboard.allShipsSunk()) finishedGame("Computer", playerBoard,)
+                setTimeout(() => { handleComputerTurn(player, computer); }, computerDelay)
             } else {
                 targetMovement.forEach(move => {
                     let newPos = addVectors(currentCoord, move)
-                    if (!isOutOfRange && player.gameboard.hits.some(array => array.every((value) => value === currentCoord))) queue.push(newPos)
+                    if (!isOutOfRange(newPos) && !player.gameboard.misses.some(array => array.every((value) => value === newPos))){
+                        queue.push(newPos)
+                    }
                 })
-                setTimeout(() => { handleComputerTargeter(player, computer); }, 1)
+                setTimeout(() => { handleComputerTurn(player, computer); }, computerDelay)
             }
         } else {
             position.classList.add("miss")
             position.textContent = "O"
             handlePlayerTurn(player, computer); //swap turn
         }
-
-        // if (!player.gameboard.receiveAttack([x, y])) {
-        //     position.classList.add("miss")
-        //     position.textContent = "O"
-        //     handlePlayerTurn(player, computer); //swap turn
-        // } else {
-        //     position.classList.add("hit")
-        //     position.textContent = "X"
-        //     setTimeout(() => { handleComputerTargeter(player, computer); }, 1) //keep going the same turn
-        //     // if (player.gameboard.allShipsSunk()) finishedGame("Computer", playerBoard,)
-        // }
     } catch (err) {
         if (err.message === "Tile already clicked") handleComputerTurn(player, computer)
     }
