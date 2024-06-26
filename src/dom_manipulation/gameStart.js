@@ -1,9 +1,11 @@
-import { generateRandom } from "./modules"
+import { generateRandom, targetMovement, addVectors, isOutOfRange } from "./modules"
 
 const playerBoard = document.querySelector('.player.board');
 const computerBoard = document.querySelector('.board-container.computer');
 const results = document.querySelector(".results")
 let playerClickListener = null
+let queue = []
+let computerTargetMode = false
 
 export function handlePlayerTurn(player, computer) {
     results.textContent = "Player's Turn!"
@@ -21,10 +23,11 @@ export function handlePlayerTurn(player, computer) {
                 computerBoard.removeEventListener('click', playerClickListener);
                 event.target.classList.add("miss")
                 event.target.textContent = "O"
+                //swap turn
                 playerBoard.classList.remove("dim")
                 computerBoard.classList.add("dim")
                 results.textContent = "Computer's Turn!"
-                setTimeout(() => { handleComputerTurn(player, computer); }, 1000) //swap turn
+                setTimeout(() => { handleComputerTurn(player, computer); }, 1) 
             } else {
                 event.target.classList.add("hit")
                 event.target.textContent = "X"
@@ -46,18 +49,41 @@ function handleComputerTurn(player, computer) {
 
     const position = document.querySelector(`[data-position='${x},${y}']`)
 
+    if (!computerTargetMode) queue = [[x,y]]
+
     try {
-        if (!player.gameboard.receiveAttack([x, y])) {
+        let currentCoord = queue.shift()
+        if (player.gameboard.receiveAttack(currentCoord)) {
+            position.classList.add("hit")
+            position.textContent = "X"
+            computerTargetMode = true
+            if (checkIfHitSinks(player, "player", x, y)) {
+                computerTargetMode = false
+                setTimeout(() => { handleComputerTargeter(player, computer); }, 1)
+                if (player.gameboard.allShipsSunk()) finishedGame("Computer", playerBoard,)
+            } else {
+                targetMovement.forEach(move => {
+                    let newPos = addVectors(currentCoord, move)
+                    if (!isOutOfRange && player.gameboard.hits.some(array => array.every((value) => value === currentCoord))) queue.push(newPos)
+                })
+                setTimeout(() => { handleComputerTargeter(player, computer); }, 1)
+            }
+        } else {
             position.classList.add("miss")
             position.textContent = "O"
             handlePlayerTurn(player, computer); //swap turn
-        } else {
-            position.classList.add("hit")
-            position.textContent = "X"
-            setTimeout(() => { handleComputerTurn(player, computer); }, 1000) //keep going the same turn
-            checkIfHitSinks(player, "player", x, y)
-            if (player.gameboard.allShipsSunk()) finishedGame("Computer", playerBoard,)
         }
+
+        // if (!player.gameboard.receiveAttack([x, y])) {
+        //     position.classList.add("miss")
+        //     position.textContent = "O"
+        //     handlePlayerTurn(player, computer); //swap turn
+        // } else {
+        //     position.classList.add("hit")
+        //     position.textContent = "X"
+        //     setTimeout(() => { handleComputerTargeter(player, computer); }, 1) //keep going the same turn
+        //     // if (player.gameboard.allShipsSunk()) finishedGame("Computer", playerBoard,)
+        // }
     } catch (err) {
         if (err.message === "Tile already clicked") handleComputerTurn(player, computer)
     }
@@ -72,7 +98,7 @@ function finishedGame(winner, board, clickListener) {
 }
 
 function checkIfHitSinks(player, name, x, y) {
-    if (!player.gameboard.board[y][x].isSunk()) return
+    if (!player.gameboard.board[y][x].isSunk()) return false
 
     for (let i = 0; i < 10; i++) {
         for (let j = 0; j < 10; j++) {
@@ -80,6 +106,6 @@ function checkIfHitSinks(player, name, x, y) {
                 document.querySelector(`.${name}.board [data-position='${i},${j}']`).classList.add("sunk")
         }
     }
-
     results.textContent = `${player.gameboard.board[y][x].name} has been sunk!`
+    return true
 }

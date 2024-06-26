@@ -49,3 +49,19 @@ export function randomizeShipPlacement(player, board, index, isComputer) {
 
     if (isComputer) startBtn.disabled = false
 }
+
+export let targetMovement = [
+    [0, 1], [0, -1], 
+    [1, 0], [-1, 0],
+]
+
+export function addVectors(vec1, vec2) {
+    return vec1.map((value, index) => Number(value) + Number(vec2[index]));
+}
+
+export function isOutOfRange(position) {
+    const x = position[0];
+    const y = position[1];
+    
+    return (x < 0 || x > 9 || y < 0 || y > 9);
+}
