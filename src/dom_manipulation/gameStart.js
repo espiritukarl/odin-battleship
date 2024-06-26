@@ -3,7 +3,7 @@ import { generateRandom, targetMovement, addVectors, isOutOfRange } from "./modu
 const playerBoard = document.querySelector('.player.board');
 const computerBoard = document.querySelector('.board-container.computer');
 const results = document.querySelector(".results")
-const computerDelay = 1
+const computerDelay = 1000
 let playerClickListener = null
 let queue = []
 let computerTargetMode = false
